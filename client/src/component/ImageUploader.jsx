@@ -1,18 +1,18 @@
 import React, { useState } from "react";
 import axios from "axios";
-import "./uploader.css";
+import "./ImageUploader.css"; // Import CSS
 
 const ImageUploader = () => {
   const [file, setFile] = useState(null);
   const [preview, setPreview] = useState(null);
-  const [loading, setLoading] = useState(false);
   const [uploadedUrl, setUploadedUrl] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   const handleFileChange = (e) => {
-    const selectedFile = e.target.files?.[0];
-    if (selectedFile) {
-      setFile(selectedFile);
-      setPreview(URL.createObjectURL(selectedFile));
+    const selected = e.target.files[0];
+    if (selected) {
+      setFile(selected);
+      setPreview(URL.createObjectURL(selected));
       setUploadedUrl(null);
     }
   };
@@ -24,18 +24,11 @@ const ImageUploader = () => {
       const formData = new FormData();
       formData.append("myfile", file);
 
-      const response = await axios.post(
-        "http://localhost:8080/api/image/upload",
-        formData,
-        {
-          headers: { "Content-Type": "multipart/form-data" },
-        }
-      );
-
-      setUploadedUrl(response.data?.your_url?.image_url);
-    } catch (error) {
-      console.error("Upload failed:", error);
-      alert("Image upload failed. Check console for details.");
+      const res = await axios.post("http://localhost:8080/api/image/upload", formData);
+      setUploadedUrl(res.data?.your_url?.image_url);
+    } catch (err) {
+      console.error(err);
+      alert("Upload failed!");
     } finally {
       setLoading(false);
     }
@@ -43,34 +36,33 @@ const ImageUploader = () => {
 
   return (
     <div className="uploader-container">
-      <h2>Upload Image</h2>
+      <h2 className="uploader-title">📤 Upload Image</h2>
 
       <div className="upload-box">
-        <input type="file" accept="image/*" onChange={handleFileChange} />
+        <input id="fileInput" type="file" accept="image/*" onChange={handleFileChange} />
+        <label htmlFor="fileInput" className="file-label">
+          {file ? file.name : "Choose File"}
+        </label>
+
+        <button className="upload-btn" onClick={handleUpload} disabled={!file || loading}>
+          {loading ? "Uploading..." : "Upload"}
+        </button>
       </div>
 
       {preview && (
-        <div className="preview-box">
-          <p>Preview:</p>
-          <img src={preview} alt="Preview" />
+        <div className="preview-container">
+          <p>📷 Preview:</p>
+          <img className="preview-img" src={preview} alt="Preview" />
         </div>
       )}
 
-      <button
-        className="upload-btn"
-        onClick={handleUpload}
-        disabled={!file || loading}
-      >
-        {loading ? "Uploading..." : "Upload"}
-      </button>
-
       {uploadedUrl && (
-        <div className="result-box">
-          <p className="success">✅ Upload Successful!</p>
-          <a href={uploadedUrl} target="_blank" rel="noopener noreferrer">
-            {uploadedUrl}
+        <div className="result">
+          <p className="success">✅ Uploaded Successfully!</p>
+          <a href={uploadedUrl} target="_blank" rel="noreferrer">
+            View Image
           </a>
-          <img src={uploadedUrl} alt="Uploaded" />
+          <img src={uploadedUrl} alt="Uploaded" className="uploaded-img" />
         </div>
       )}
     </div>
