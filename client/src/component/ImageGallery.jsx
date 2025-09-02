@@ -14,8 +14,11 @@ const ImageGallery = () => {
         // Handle both formats: array OR object with `images`
         if (Array.isArray(res.data)) {
           setImages(res.data);
+          console.log("user Details :- ", images)
         } else if (res.data.images && Array.isArray(res.data.images)) {
           setImages(res.data.images);
+          console.log("user Details :- ", res.data.images)
+          // setUserData(res.data.images)
         } else {
           setImages([]); // fallback
         }
@@ -43,15 +46,22 @@ const ImageGallery = () => {
             key={img._id}
             style={{ border: "1px solid #ccc", padding: "10px", display:"flex", flexDirection:"column" }}
           >
-            <img
+            <div style={{width:"200px", height:"200px"}}>
+              <img
               src={img.Image_Url}
               alt="uploaded"
               style={{
-                width: "200px",
-                height: "200px",
-                objectFit: "cover",
+                width: "100%",
+                objectFit: "fit",
+                marginBottom:"2rem"
               }}
             />
+            </div>
+            <div className="details">
+              <h3>{img.name || "No Name"}</h3>
+              <p>Email: {img.email || "N/A"}</p>
+              <p>Mobile: {img.mobile || "N/A"}</p>
+            </div>
             <button
               onClick={() => handleDelete(img._id)}
               style={{
