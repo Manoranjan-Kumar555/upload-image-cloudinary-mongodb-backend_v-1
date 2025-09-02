@@ -7,6 +7,11 @@ const ImageUploader = () => {
   const [preview, setPreview] = useState(null);
   const [uploadedUrl, setUploadedUrl] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [form, setForm] = useState({
+    name: "",
+    email: "",
+    mobile: "",
+  });
 
   const handleFileChange = (e) => {
     const selected = e.target.files[0];
@@ -17,14 +22,24 @@ const ImageUploader = () => {
     }
   };
 
+  const handleChange = (e) => {
+    setForm({ ...form, [e.target.name]: e.target.value });
+  };
+
   const handleUpload = async () => {
-    if (!file) return;
+    if (!file || !form.name || !form.email || !form.mobile) {
+      alert("Please fill all fields and choose an image!");
+      return;
+    }
     setLoading(true);
     try {
       const formData = new FormData();
-      formData.append("myfile", file);
+      formData.append("file", file);
+      formData.append("name", form.name);
+      formData.append("email", form.email);
+      formData.append("mobile", form.mobile);
 
-      const res = await axios.post("http://localhost:8080/api/image/upload", formData);
+      const res = await axios.post("http://localhost:8080/api/image/upload-form", formData);
       setUploadedUrl(res.data?.your_url?.image_url);
     } catch (err) {
       console.error(err);
@@ -36,7 +51,31 @@ const ImageUploader = () => {
 
   return (
     <div className="uploader-container">
-      <h2 className="uploader-title">📤 Upload Image</h2>
+      <h2 className="uploader-title">📤 Upload Image with Details</h2>
+
+      <div className="form-fields">
+        <input
+          type="text"
+          name="name"
+          placeholder="Enter Name"
+          value={form.name}
+          onChange={handleChange}
+        />
+        <input
+          type="email"
+          name="email"
+          placeholder="Enter Email"
+          value={form.email}
+          onChange={handleChange}
+        />
+        <input
+          type="text"
+          name="mobile"
+          placeholder="Enter Mobile"
+          value={form.mobile}
+          onChange={handleChange}
+        />
+      </div>
 
       <div className="upload-box">
         <input id="fileInput" type="file" accept="image/*" onChange={handleFileChange} />

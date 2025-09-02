@@ -1,64 +1,78 @@
 .uploader-container {
   max-width: 500px;
   margin: 40px auto;
-  padding: 25px;
-  background: #ffffff;
-  border-radius: 15px;
-  box-shadow: 0px 6px 18px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  border: 2px dashed #4cafef;
+  border-radius: 12px;
   text-align: center;
-  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  background: #fdfdfd;
+  box-shadow: 0 6px 12px rgba(0,0,0,0.1);
 }
 
 .uploader-title {
+  font-size: 22px;
   margin-bottom: 20px;
-  font-size: 24px;
-  font-weight: 600;
-  color: #444;
+  color: #333;
 }
 
-.upload-box {
+.form-fields {
   display: flex;
-  align-items: flex-end;
-  justify-content: center;
+  flex-direction: column;
   gap: 12px;
   margin-bottom: 20px;
 }
 
-input[type="file"] {
-  display: none;
+.form-fields input {
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 14px;
+  outline: none;
+  transition: border 0.2s;
+}
+
+.form-fields input:focus {
+  border-color: #4cafef;
+}
+
+.upload-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
 }
 
 .file-label {
-  padding: 10px 16px;
-  background: #f1f1f1;
+  display: inline-block;
+  padding: 8px 16px;
+  background: #f0f0f0;
   border-radius: 6px;
-  border: 1px solid #ccc;
   cursor: pointer;
-  transition: 0.3s ease;
+  transition: background 0.2s;
 }
 
 .file-label:hover {
-  background: #e8e8e8;
+  background: #ddd;
 }
 
 .upload-btn {
   padding: 10px 20px;
-  background: linear-gradient(135deg, #4cafef, #1976d2);
+  background: #4cafef;
   color: white;
   border: none;
   border-radius: 6px;
-  font-weight: 600;
+  font-size: 14px;
   cursor: pointer;
-  transition: 0.3s ease;
-}
-
-.upload-btn:hover {
-  background: linear-gradient(135deg, #1976d2, #0d47a1);
+  transition: background 0.3s;
 }
 
 .upload-btn:disabled {
-  background: #ccc;
+  background: #aaa;
   cursor: not-allowed;
+}
+
+.upload-btn:hover:not(:disabled) {
+  background: #2196f3;
 }
 
 .preview-container {
@@ -67,24 +81,23 @@ input[type="file"] {
 
 .preview-img {
   width: 100%;
-  max-width: 300px;
-  border-radius: 12px;
-  margin-top: 10px;
-  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.2);
+  max-height: 250px;
+  object-fit: cover;
+  border-radius: 10px;
+  margin-top: 8px;
 }
 
 .result {
-  margin-top: 25px;
+  margin-top: 20px;
 }
 
 .success {
   color: green;
-  font-weight: 600;
+  font-weight: bold;
 }
 
 .uploaded-img {
-  margin-top: 12px;
-  max-width: 100%;
-  border-radius: 12px;
-  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.15);
+  width: 100%;
+  margin-top: 10px;
+  border-radius: 10px;
 }

@@ -24,6 +24,44 @@ const uploadImage = async (req, res) => {
   }
 };
 
+// upload image with form (name, email, mobile)
+const uploadImageWithForm = async (req, res) => {
+  try {
+    console.log("BODY:", req.body);
+    console.log("FILE:", req.file);
+
+    if (!req.file) {
+      return res.status(400).json({ message: "No file uploaded" });
+    }
+
+    const uploaded = await cloudinary.uploader.upload(req.file.path);
+
+    const newImage = new ImageModel({
+      Image_Url: uploaded.secure_url,
+      name: req.body.name,
+      email: req.body.email,
+      mobile: req.body.mobile,
+    });
+    await newImage.save();
+
+    fs.unlink(req.file.path, (err) => {
+      if (err) console.log("File deletion error:", err);
+    });
+
+    res.json({
+      message: "Image Saved Successfully!",
+      data: {
+        name: newImage.name,
+        email: newImage.email,
+        mobile: newImage.mobile,
+        image_url: uploaded.secure_url,
+      },
+    });
+  } catch (error) {
+    console.error("Upload failed:", error);
+    res.status(500).json({ message: "Upload failed", error: error.message });
+  }
+};
 
 // Fetch all images
 const getAllImages = async (req, res) => {
@@ -36,7 +74,9 @@ const getAllImages = async (req, res) => {
     });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: "Failed to fetch images", error: error.message });
+    res
+      .status(500)
+      .json({ message: "Failed to fetch images", error: error.message });
   }
 };
 
@@ -62,9 +102,15 @@ const deleteImages = async (req, res) => {
     res.json({ message: "Image deleted successfully" });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: "Failed to delete image", error: error.message });
+    res
+      .status(500)
+      .json({ message: "Failed to delete image", error: error.message });
   }
 };
 
-
-module.exports = { uploadImage, getAllImages, deleteImages };
+module.exports = {
+  uploadImage,
+  getAllImages,
+  deleteImages,
+  uploadImageWithForm,
+};
