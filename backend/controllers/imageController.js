@@ -24,4 +24,21 @@ const uploadImage = async (req, res) => {
   }
 };
 
-module.exports = { uploadImage };
+
+// Fetch all images
+const getAllImages = async (req, res) => {
+  try {
+    const images = await ImageModel.find().sort({ createdAt: -1 }); // newest first
+    res.json({
+      message: "Fetched all images successfully!",
+      count: images.length,
+      images,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Failed to fetch images", error: error.message });
+  }
+};
+
+
+module.exports = { uploadImage, getAllImages };

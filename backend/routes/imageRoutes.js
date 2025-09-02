@@ -1,7 +1,7 @@
 const express = require("express");
 const multer = require("multer");
 const { v4: uuidv4 } = require("uuid");
-const { uploadImage } = require("../controllers/imageController");
+const { uploadImage, getAllImages } = require("../controllers/imageController");
 
 const router = express.Router();
 
@@ -20,5 +20,6 @@ const upload = multer({ storage: storage });
 
 // Routes
 router.post("/upload", upload.single("myfile"), uploadImage);
+router.get("/all", getAllImages);
 
 module.exports = router;
