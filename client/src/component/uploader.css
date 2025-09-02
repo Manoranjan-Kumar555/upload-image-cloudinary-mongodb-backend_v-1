@@ -50,6 +50,7 @@
 }
 
 .upload-btn {
+  width: 100%;
   display: inline-block;
   background: #007bff;
   color: white;
@@ -226,6 +227,7 @@ button:disabled {
 }
 
 .file-label {
+  width: 100%;
   display: inline-block;
   padding: 10px 20px;
   background: #007bff;

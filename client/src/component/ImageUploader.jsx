@@ -23,7 +23,10 @@ const ImageUploader = () => {
   };
 
   const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
+    setForm({
+      ...form,
+      [e.target.name]: e.target.value,
+    });
   };
 
   const handleUpload = async () => {
@@ -39,7 +42,10 @@ const ImageUploader = () => {
       formData.append("email", form.email);
       formData.append("mobile", form.mobile);
 
-      const res = await axios.post("http://localhost:8080/api/image/upload-form", formData);
+      const res = await axios.post(
+        "http://localhost:8080/api/image/upload-form",
+        formData
+      );
       setUploadedUrl(res.data?.your_url?.image_url);
     } catch (err) {
       console.error(err);
@@ -78,12 +84,21 @@ const ImageUploader = () => {
       </div>
 
       <div className="upload-box">
-        <input id="fileInput" type="file" accept="image/*" onChange={handleFileChange} />
-        <label htmlFor="fileInput" className="file-label">
+        <input
+          id="fileInput"
+          type="file"
+          accept="image/*"
+          onChange={handleFileChange}
+        />
+        {/* <label htmlFor="fileInput" className="file-label">
           {file ? file.name : "Choose File"}
-        </label>
+        </label> */}
 
-        <button className="upload-btn" onClick={handleUpload} disabled={!file || loading}>
+        <button
+          className="upload-btn"
+          onClick={handleUpload}
+          disabled={!file || loading}
+        >
           {loading ? "Uploading..." : "Upload"}
         </button>
       </div>
