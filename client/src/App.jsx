@@ -1,12 +1,16 @@
-import './App.css'
+import "./App.css";
+import ImageUploader from "./component/ImageUploader";
 
 function App() {
-
   return (
     <>
-      <h1>Image upload in our Server Cloudinary then mongoDB </h1>
+      <div
+        style={{ background: "#f9fafb", minHeight: "100vh", padding: "40px" }}
+      >
+        <ImageUploader />
+      </div>
     </>
-  )
+  );
 }
 
-export default App
+export default App;

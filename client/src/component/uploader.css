@@ -1,0 +1,100 @@
+.uploader-container {
+  max-width: 420px;
+  margin: 50px auto;
+  padding: 25px;
+  border-radius: 12px;
+  background: #ffffff;
+  box-shadow: 0px 6px 18px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+.uploader-container h2 {
+  margin-bottom: 20px;
+  font-size: 1.6rem;
+  color: #333;
+}
+
+.upload-box {
+  margin-bottom: 15px;
+}
+
+.upload-box input[type="file"] {
+  padding: 10px;
+  border: 2px dashed #ccc;
+  border-radius: 8px;
+  width: 100%;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.upload-box input[type="file"]:hover {
+  border-color: #007bff;
+}
+
+.preview-box {
+  margin: 15px 0;
+}
+
+.preview-box p {
+  margin-bottom: 8px;
+  font-size: 0.9rem;
+  color: #555;
+}
+
+.preview-box img {
+  width: 100%;
+  max-height: 220px;
+  object-fit: cover;
+  border-radius: 10px;
+  border: 1px solid #ddd;
+}
+
+.upload-btn {
+  display: inline-block;
+  background: #007bff;
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: 0.3s;
+}
+
+.upload-btn:hover {
+  background: #0056b3;
+}
+
+.upload-btn:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+}
+
+.result-box {
+  margin-top: 20px;
+}
+
+.result-box .success {
+  color: green;
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+
+.result-box a {
+  display: block;
+  margin-bottom: 12px;
+  color: #007bff;
+  word-break: break-word;
+}
+
+.result-box a:hover {
+  text-decoration: underline;
+}
+
+.result-box img {
+  width: 100%;
+  max-height: 220px;
+  object-fit: cover;
+  border-radius: 10px;
+  border: 1px solid #ddd;
+}
