@@ -40,5 +40,31 @@ const getAllImages = async (req, res) => {
   }
 };
 
+// delete the images from the database
+const deleteImages = async (req, res) => {
+  try {
+    const { id } = req.params; // image document _id
 
-module.exports = { uploadImage, getAllImages };
+    const image = await ImageModel.findById(id);
+    if (!image) {
+      return res.status(404).json({ message: "Image not found" });
+    }
+
+    // delete from cloudinary
+    if (image.Public_Id) {
+      await cloudinary.uploader.destroy(image.Public_Id);
+      console.log(Public_Id);
+    }
+
+    // delete from database
+    await ImageModel.findByIdAndDelete(id);
+
+    res.json({ message: "Image deleted successfully" });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Failed to delete image", error: error.message });
+  }
+};
+
+
+module.exports = { uploadImage, getAllImages, deleteImages };
