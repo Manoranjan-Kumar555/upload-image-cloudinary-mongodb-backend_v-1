@@ -3,6 +3,15 @@
   margin: 0;
   box-sizing: border-box;
 }
+/* body{
+  background: linear-gradient(135deg, #4e54c8, #00893e);
+} */
+
+.app_page-container {
+  background: linear-gradient(135deg, #cef1f0, #ebf7b0);
+  min-height: 100vh;
+  padding: 40px;
+}
 
 .gallery-container {
   display: flex;
@@ -74,3 +83,37 @@
   color: #888;
   margin-top: 40px;
 }
+
+
+
+/* Base style for all toasts */
+
+
+.custom-toast {
+ background: #ffffff !important;
+  color: #000000 !important;
+  padding: 18px 16px !important;
+  border-radius: 8px !important;
+  font-size: 14px;
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.25);
+}
+
+/* Success toast */
+.custom-toast[data-type="success"] {
+  background: #4caf50 !important; /* green */
+  color: white !important;
+}
+
+/* Error toast */
+.custom-toast[data-type="error"] {
+  background: #f44336 !important; /* red */
+  color: white !important;
+}
+
+/* Loading toast */
+.custom-toast[data-type="loading"] {
+  background: #2196f3 !important; /* blue */
+  color: white !important;
+}
+
+

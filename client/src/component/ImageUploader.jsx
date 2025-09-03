@@ -1,6 +1,9 @@
 import React, { useState } from "react";
 import axios from "axios";
 import "./ImageUploader.css"; // Import CSS
+import toast from "react-hot-toast";
+import { useGlobalLoaderContext } from "../helpers/GlobalLoader"; // adjust path
+ import { useNavigate } from "react-router";
 
 const ImageUploader = () => {
   const [file, setFile] = useState(null);
@@ -12,6 +15,10 @@ const ImageUploader = () => {
     email: "",
     mobile: "",
   });
+
+  const naviagte = useNavigate();
+
+  const { showLoader, hideLoader } = useGlobalLoaderContext();
 
   const handleFileChange = (e) => {
     const selected = e.target.files[0];
@@ -41,17 +48,24 @@ const ImageUploader = () => {
       formData.append("name", form.name);
       formData.append("email", form.email);
       formData.append("mobile", form.mobile);
-
+      showLoader(); // 👈 show loader
       const res = await axios.post(
         "http://localhost:8080/api/image/upload-form",
         formData
       );
       setUploadedUrl(res.data?.your_url?.image_url);
+      toast.success("Submitted Image and Details Successfully!", {
+        id: "fetch-success",
+        
+      });
+      naviagte("/data")
     } catch (err) {
       console.error(err);
+      toast.error("Submitting Details and Images Upload failed!");
       alert("Upload failed!");
     } finally {
       setLoading(false);
+      hideLoader(); // 👈 always hide loader
     }
   };
 

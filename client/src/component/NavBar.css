@@ -1,42 +1,107 @@
+/* Navbar container */
 .navbar {
   display: flex;
   justify-content: space-between;
   align-items: center;
   background: linear-gradient(135deg, #4e54c8, #00893e);
-  padding: 12px 20px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  padding: 12px 24px;
+  color: white;
+  font-family: "Poppins", sans-serif;
   position: sticky;
   top: 0;
   z-index: 1000;
 }
 
+/* Logo */
 .navbar-logo {
-  font-size: 20px;
+  font-size: 1.4rem;
   font-weight: bold;
-  color: white;
+  letter-spacing: 1px;
 }
 
+/* Links container */
 .navbar-links {
   display: flex;
+  align-items: center;
   gap: 20px;
 }
 
+/* Nav links */
 .nav-link {
-  color: rgb(255, 255, 255);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: white;
   text-decoration: none;
-  font-weight: 500;
-  font-size: 14px;
-  padding: 6px 12px;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  padding: 6px 10px;
   border-radius: 6px;
-  transition: background 0.3s ease, transform 0.2s;
 }
 
 .nav-link:hover {
-  background: rgba(248, 18, 18, 0.9);
-  transform: scale(1.05);
+  background: rgba(255, 255, 255, 0.15);
 }
 
 .nav-link.active {
-  background: rgba(248, 18, 18, 0.9); /* Red background when active */
-  font-weight: bold;
+  background: rgba(0, 0, 0, 0.3);
+}
+
+/* Logout button */
+.logout-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: #e63946;
+  border: none;
+  padding: 8px 14px;
+  color: white;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background 0.3s;
+}
+
+.logout-btn:hover {
+  background: #d62839;
+}
+
+/* Icons */
+.icon {
+  font-size: 1.1rem;
+}
+
+/* Hamburger menu (mobile) */
+.menu-icon {
+  display: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .menu-icon {
+    display: block;
+  }
+
+  .navbar-links {
+    position: absolute;
+    top: 60px;
+    right: 0;
+    background: #4e54c8;
+    flex-direction: column;
+    width: 200px;
+    padding: 20px;
+    display: none;
+  }
+
+  .navbar-links.active {
+    display: flex;
+  }
+
+  .nav-link, .logout-btn {
+    width: 100%;
+    text-align: left;
+    justify-content: flex-start;
+  }
 }

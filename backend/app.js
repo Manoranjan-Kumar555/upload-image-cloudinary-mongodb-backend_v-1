@@ -4,6 +4,7 @@ const cors = require("cors");
 const dbConnection = require("./db/dbConnection");
 const errorHandler = require("./middleware/errorHandler");
 const imageRoutes = require("./routes/imageRoutes");
+const authRoutes = require("./routes/authRoutes");
 
 dotenv.config({ path: ".env" });
 
@@ -43,6 +44,8 @@ app.get("/", (req, res) => {
 
 // Routes
 app.use("/api/image", imageRoutes);
+// Routes
+app.use("/api/auth", authRoutes);
 
 // Error handler
 app.use(errorHandler);

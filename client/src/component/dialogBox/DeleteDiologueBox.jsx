@@ -6,23 +6,35 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import axios from "axios";
+import toast from "react-hot-toast";
+import { useGlobalLoaderContext } from "../../helpers/GlobalLoader"; // adjust path
 
 export default function AlertDialog({ id, setImages }) {
   // console.log("id :- ", id)
   const [open, setOpen] = React.useState(false);
-
+  const { showLoader, hideLoader } = useGlobalLoaderContext();
   const handleClickOpen = () => {
     setOpen(true);
   };
 
   const handleDelete = async () => {
     try {
+      showLoader(); // 👈 correct message
       await axios.delete(`http://localhost:8080/api/image/${id}`);
-      setImages((prev) => prev.filter((img) => img._id !== id)); // update state
+
+      // Update state after delete
+      setImages((prev) => prev.filter((img) => img._id !== id));
+
+      toast.success("Deleted Image and Details Successfully!", {
+        id: "delete-status",
+      });
     } catch (error) {
       console.error("Delete failed:", error);
+      toast.error("Failed to delete image!", { id: "delete-status" });
+    } finally {
+      hideLoader(); // 👈 always hide loader
+      setOpen(false); // 👈 always close modal/dialog
     }
-    setOpen(false);
   };
 
   const handleClose = () => {
@@ -35,21 +47,22 @@ export default function AlertDialog({ id, setImages }) {
         variant="outlined"
         onClick={handleClickOpen}
         sx={{
-            width:"100%",
+          background: "white",
+          width: "100%",
           boxShadow: "0 4px 12px rgba(0,0,0,0.15)",
           transition: "transform 0.3s ease, box-shadow 0.3s ease",
           cursor: "pointer",
         }}
         onMouseOver={(e) => {
           e.currentTarget.style.transform = "scale(1.05)";
-          e.currentTarget.style.background="blue"
-          e.currentTarget.style.color="white"
+          e.currentTarget.style.background = "red";
+          e.currentTarget.style.color = "white";
           e.currentTarget.style.boxShadow = "0 8px 20px rgba(0,0,0,0.3)";
         }}
         onMouseOut={(e) => {
           e.currentTarget.style.transform = "scale(1)";
-          e.currentTarget.style.background="white"
-          e.currentTarget.style.color="blue"
+          e.currentTarget.style.background = "white";
+          e.currentTarget.style.color = "blue";
           e.currentTarget.style.boxShadow = "0 4px 12px rgba(0,0,0,0.15)";
         }}
       >
@@ -70,8 +83,41 @@ export default function AlertDialog({ id, setImages }) {
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose}>Cancel</Button>
-          <Button onClick={handleDelete} autoFocus>
+          <Button
+            variant="outlined"
+            onMouseOver={(e) => {
+              e.currentTarget.style.transform = "scale(1.05)";
+              e.currentTarget.style.background = "red";
+              e.currentTarget.style.color = "white";
+              e.currentTarget.style.boxShadow = "0 8px 20px rgba(0,0,0,0.3)";
+            }}
+            onMouseOut={(e) => {
+              e.currentTarget.style.transform = "scale(1)";
+              e.currentTarget.style.background = "white";
+              e.currentTarget.style.color = "blue";
+              e.currentTarget.style.boxShadow = "0 4px 12px rgba(0,0,0,0.15)";
+            }}
+            onClick={handleClose}
+          >
+            Cancel
+          </Button>
+          <Button
+            variant="outlined"
+            onMouseOver={(e) => {
+              e.currentTarget.style.transform = "scale(1.05)";
+              e.currentTarget.style.background = "green";
+              e.currentTarget.style.color = "white";
+              e.currentTarget.style.boxShadow = "0 8px 20px rgba(0,0,0,0.3)";
+            }}
+            onMouseOut={(e) => {
+              e.currentTarget.style.transform = "scale(1)";
+              e.currentTarget.style.background = "white";
+              e.currentTarget.style.color = "blue";
+              e.currentTarget.style.boxShadow = "0 4px 12px rgba(0,0,0,0.15)";
+            }}
+            onClick={handleDelete}
+            autoFocus
+          >
             Agree
           </Button>
         </DialogActions>

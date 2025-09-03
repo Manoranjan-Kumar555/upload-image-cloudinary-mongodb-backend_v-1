@@ -1,31 +1,45 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import DeleteDiologueBox from "../component/dialogBox/DeleteDiologueBox"
+import toast from 'react-hot-toast';
+import { useGlobalLoaderContext } from "../helpers/GlobalLoader"; // adjust path
 
 const ImageGallery = () => {
   const [images, setImages] = useState([]);
+  const { showLoader, hideLoader } = useGlobalLoaderContext();
 
   // Fetch images
   useEffect(() => {
-    axios
-      .get("http://localhost:8080/api/image/all")
-      .then((res) => {
-        console.log("API Response:", res.data);
+  const fetchImages = async () => {
+    try {
+      showLoader(); // 👈 show loader
 
-        // Handle both formats: array OR object with `images`
-        if (Array.isArray(res.data)) {
-          setImages(res.data);
-          console.log("user Details :- ", images);
-        } else if (res.data.images && Array.isArray(res.data.images)) {
-          setImages(res.data.images);
-          console.log("user Details :- ", res.data.images);
-          // setUserData(res.data.images)
-        } else {
-          setImages([]); // fallback
-        }
-      })
-      .catch((err) => console.error("Error fetching images:", err));
-  }, []);
+      const res = await axios.get("http://localhost:8080/api/image/all");
+      console.log("API Response:", res.data);
+
+      if (Array.isArray(res.data)) {
+        setImages(res.data);
+        console.log("user Details :- ", res.data);
+      } else if (res.data.images && Array.isArray(res.data.images)) {
+        setImages(res.data.images);
+        console.log("user Details :- ", res.data.images);
+        toast.success("Fetch all Image and Details Successfully!", {
+          id: "fetch-success",
+        });
+      } else {
+        setImages([]); // fallback
+      }
+    } catch (err) {
+      console.error("Error fetching images:", err);
+      toast.error("Failed to fetch images and details", { id: "fetch-error" });
+    } finally {
+      hideLoader(); // 👈 always hide loader
+    }
+  };
+
+  fetchImages();
+}, []);
+
 
   // Delete image
   // const handleDelete = async (id) => {

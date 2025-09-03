@@ -1,0 +1,104 @@
+/* Login.css & Signup.css */
+.login-container,
+.signup-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  /* background: #eef2f3; */
+  background: linear-gradient(135deg, #5075d8, #ebf7b0);
+}
+
+.login-box,
+.signup-box {
+  background: white;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  width: 350px;
+}
+
+input {
+  width: 100%;
+  margin: 10px 0;
+  padding: 12px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+}
+
+button {
+  width: 100%;
+  padding: 12px;
+  background: #4a90e2;
+  border: none;
+  color: white;
+  font-size: 16px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+button:hover {
+  background: #357ab8;
+}
+
+p {
+  margin-top: 1rem;
+  text-align: center;
+}
+
+/* NavBar.css */
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  padding: 1rem 2rem;
+  background: #4a90e2;
+  color: white;
+}
+
+.navbar-links a,
+.logout-btn {
+  margin: 0 1rem;
+  color: white;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.logout-btn {
+  background: #ff4d4f;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.logout-btn:hover {
+  background: #cc0000;
+}
+
+.signup-box {
+  background: #fff;
+  padding: 2.5rem;
+  border-radius: 16px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+  width: 350px;
+  text-align: center;
+  animation: fadeIn 0.6s ease-in-out;
+}
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-15px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.error-text {
+  color: #e63946;
+  font-size: 0.8rem;
+  margin-top: 4px;
+  display: block;
+  text-align: left;
+}

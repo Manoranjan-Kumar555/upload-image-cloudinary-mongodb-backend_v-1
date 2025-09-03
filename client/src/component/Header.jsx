@@ -18,6 +18,7 @@ const Header = ({ activeTab, setActiveTab }) => {
         >
           Show All Images
         </button>
+        
       </nav>
     </header>
   );
