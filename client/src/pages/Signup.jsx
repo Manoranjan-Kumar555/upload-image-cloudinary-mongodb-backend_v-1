@@ -6,6 +6,7 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import "./Signup.css";
+import { FiEye, FiEyeOff, FiLogIn } from "react-icons/fi";
 
 // ✅ Validation schema
 const schema = yup.object().shape({
@@ -27,6 +28,7 @@ const schema = yup.object().shape({
 const Signup = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   // ✅ Hook Form
   const {
@@ -92,12 +94,20 @@ const Signup = () => {
           <span className="error-text">{errors.mobile.message}</span>
         )}
 
-        {/* Password */}
-        <input
-          type="password"
-          placeholder="Enter password"
-          {...register("password")}
-        />
+        {/* Password Field */}
+        <div className="input-group password-field">
+          <input
+            type={showPassword ? "text" : "password"}
+            placeholder="Enter your password"
+            {...register("password")}
+          />
+          <span
+            className="toggle-password"
+            onClick={() => setShowPassword(!showPassword)}
+          >
+            {showPassword ? <FiEyeOff /> : <FiEye />}
+          </span>
+        </div>
         {errors.password && (
           <span className="error-text">{errors.password.message}</span>
         )}
