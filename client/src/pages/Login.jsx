@@ -10,8 +10,14 @@ import "./Login.css";
 
 // ✅ Validation schema with Yup
 const schema = yup.object().shape({
-  email: yup.string().email("Please enter a valid email").required("Email is required"),
-  password: yup.string().min(6, "Password must be at least 6 characters").required("Password is required"),
+  email: yup
+    .string()
+    .email("Please enter a valid email")
+    .required("Email is required"),
+  password: yup
+    .string()
+    .min(6, "Password must be at least 6 characters")
+    .required("Password is required"),
 });
 
 const Login = () => {
@@ -31,7 +37,10 @@ const Login = () => {
   const onSubmit = async (values) => {
     setLoading(true);
     try {
-      const { data } = await axios.post("http://localhost:8080/api/auth/login", values);
+      const { data } = await axios.post(
+        "http://localhost:8080/api/auth/login",
+        values
+      );
 
       localStorage.setItem("token", data.token);
       localStorage.setItem("user", JSON.stringify(data.user));
@@ -40,9 +49,11 @@ const Login = () => {
       toast.success(data.message || "✅ Login successful!");
 
       if (data.user.role === "admin") {
-        navigate("/admin-dashboard");
-      } else {
         navigate("/upload");
+      } else if (data.user.role === "user") {
+        navigate("/upload");
+      } else {
+        navigate("/admin-dashboard");
       }
     } catch (err) {
       toast.error(err.response?.data?.message || "❌ Login failed");
@@ -60,17 +71,32 @@ const Login = () => {
         <p className="login-subtitle">Please login to continue</p>
 
         <div className="input-group">
-          <input type="email" placeholder="Enter your email" {...register("email")} />
-          {errors.email && <span className="error-text">{errors.email.message}</span>}
+          <input
+            type="email"
+            placeholder="Enter your email"
+            {...register("email")}
+          />
+          {errors.email && (
+            <span className="error-text">{errors.email.message}</span>
+          )}
         </div>
 
         <div className="input-group password-field">
-          <input type={showPassword ? "text" : "password"} placeholder="Enter your password" {...register("password")} />
-          <span className="toggle-password" onClick={() => setShowPassword(!showPassword)}>
+          <input
+            type={showPassword ? "text" : "password"}
+            placeholder="Enter your password"
+            {...register("password")}
+          />
+          <span
+            className="toggle-password"
+            onClick={() => setShowPassword(!showPassword)}
+          >
             {showPassword ? <FiEyeOff /> : <FiEye />}
           </span>
         </div>
-        {errors.password && <span className="error-text">{errors.password.message}</span>}
+        {errors.password && (
+          <span className="error-text">{errors.password.message}</span>
+        )}
 
         <button type="submit" disabled={loading}>
           {loading ? "Logging in..." : "Login"}

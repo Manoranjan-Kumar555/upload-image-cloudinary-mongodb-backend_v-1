@@ -8,7 +8,7 @@ import axios from "axios";
 import toast from "react-hot-toast";
 import { useGlobalLoaderContext } from "../../helpers/GlobalLoader"; // adjust path
 
-export default function AlertDialog({ id, setImages }) {
+export default function DeleteDiologueBox({ id, onDelete }) {
   const [open, setOpen] = useState(false);
   const { showLoader, hideLoader } = useGlobalLoaderContext();
 
@@ -23,21 +23,34 @@ export default function AlertDialog({ id, setImages }) {
         headers: { Authorization: `Bearer ${token}` },
       });
 
-      // ✅ Update image list after delete
-      setImages((prev) => prev.filter((img) => img._id !== id));
+      // Update image list safely
+      onDelete((prev) => {
+        if (!Array.isArray(prev)) return [];
+        return prev.filter((img) => img._id === undefined ? img.id !== id : img._id !== id);
+      });
 
       toast.success("🗑️ Image deleted successfully!");
-      setOpen(false); // close dialog after success
+      setOpen(false);
     } catch (err) {
       console.error("Delete failed:", err);
-      toast.error(err.response?.data?.message || "❌ Failed to delete image");
+
+      let message = "❌ Failed to delete image";
+      if (err.response) {
+        message = err.response.data?.message || `❌ Error ${err.response.status}`;
+      } else if (err.request) {
+        message = "❌ No response from server";
+      } else {
+        message = err.message;
+      }
+
+      toast.error(message);
     } finally {
       hideLoader();
     }
   };
 
   return (
-    <React.Fragment>
+    <>
       {/* Delete Button */}
       <Button
         variant="outlined"
@@ -58,15 +71,10 @@ export default function AlertDialog({ id, setImages }) {
         Delete
       </Button>
 
-      {/* Dialog Box */}
-      <Dialog
-        open={open}
-        onClose={() => setOpen(false)}
-        aria-labelledby="alert-dialog-title"
-        aria-describedby="alert-dialog-description"
-      >
+      {/* Dialog */}
+      <Dialog open={open} onClose={() => setOpen(false)}>
         <DialogContent>
-          <DialogContentText id="alert-dialog-description">
+          <DialogContentText>
             Are you sure you want to delete this image and its details?
           </DialogContentText>
         </DialogContent>
@@ -77,10 +85,7 @@ export default function AlertDialog({ id, setImages }) {
             sx={{
               borderColor: "gray",
               color: "gray",
-              "&:hover": {
-                background: "lightgray",
-                color: "black",
-              },
+              "&:hover": { background: "lightgray", color: "black" },
             }}
           >
             Cancel
@@ -93,16 +98,13 @@ export default function AlertDialog({ id, setImages }) {
               borderColor: "green",
               color: "green",
               fontWeight: "bold",
-              "&:hover": {
-                background: "green",
-                color: "white",
-              },
+              "&:hover": { background: "green", color: "white" },
             }}
           >
             Confirm
           </Button>
         </DialogActions>
       </Dialog>
-    </React.Fragment>
+    </>
   );
 }
