@@ -52,10 +52,10 @@ const Signup = () => {
         "http://localhost:8080/api/auth/signup",
         formData
       );
-      localStorage.setItem("token", data.token);
-      localStorage.setItem("user", JSON.stringify(data.user));
+      // localStorage.setItem("token", data.token);
+      // localStorage.setItem("user", JSON.stringify(data.user));
       toast.success(data.message || "✅ Signup successful!");
-      navigate("/upload");
+      navigate("/login");
     } catch (err) {
       toast.error(err.response?.data?.message || "❌ Signup failed");
     } finally {
