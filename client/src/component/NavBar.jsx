@@ -8,10 +8,13 @@ const NavBar = () => {
   const navigate = useNavigate();
   const [menuOpen, setMenuOpen] = useState(false);
 
+  const role = localStorage.getItem("role");
+
   const handleLogout = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("user");
-    toast.success("✅ Logged out successfully");
+    localStorage.removeItem("role");
+    toast.success("✅ Logged out");
     navigate("/login");
   };
 
@@ -27,22 +30,31 @@ const NavBar = () => {
 
       {/* Links */}
       <div className={`navbar-links ${menuOpen ? "active" : ""}`}>
+        {/* Upload visible to all */}
         <NavLink
           to="/upload"
-          className={({ isActive }) => (isActive ? "nav-link active" : "nav-link")}
+          className={({ isActive }) =>
+            isActive ? "nav-link active" : "nav-link"
+          }
           onClick={() => setMenuOpen(false)}
         >
           <FiUpload className="icon" /> Upload
         </NavLink>
 
-        <NavLink
-          to="/data"
-          className={({ isActive }) => (isActive ? "nav-link active" : "nav-link")}
-          onClick={() => setMenuOpen(false)}
-        >
-          <FiDatabase className="icon" /> Data
-        </NavLink>
+        {/* Data visible only to admin */}
+        {role === "admin" && (
+          <NavLink
+            to="/data"
+            className={({ isActive }) =>
+              isActive ? "nav-link active" : "nav-link"
+            }
+            onClick={() => setMenuOpen(false)}
+          >
+            <FiDatabase className="icon" /> Data
+          </NavLink>
+        )}
 
+        {/* Logout visible to all */}
         <button className="logout-btn" onClick={handleLogout}>
           <FiLogOut className="icon" /> Logout
         </button>

@@ -2,6 +2,7 @@ const fs = require("fs");
 const cloudinary = require("../utlis/cloudinary");
 const ImageModel = require("../models/imageModel");
 
+
 const uploadImage = async (req, res) => {
   try {
     const uploaded = await cloudinary.uploader.upload(req.file.path);

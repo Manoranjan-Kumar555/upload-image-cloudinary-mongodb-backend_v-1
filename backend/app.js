@@ -6,6 +6,7 @@ const errorHandler = require("./middleware/errorHandler");
 const imageRoutes = require("./routes/imageRoutes");
 const authRoutes = require("./routes/authRoutes");
 
+
 dotenv.config({ path: ".env" });
 
 const app = express();

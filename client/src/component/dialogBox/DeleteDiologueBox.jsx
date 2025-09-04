@@ -1,124 +1,105 @@
-import * as React from "react";
+import React, { useState } from "react";
 import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
-import DialogTitle from "@mui/material/DialogTitle";
 import axios from "axios";
 import toast from "react-hot-toast";
 import { useGlobalLoaderContext } from "../../helpers/GlobalLoader"; // adjust path
 
 export default function AlertDialog({ id, setImages }) {
-  // console.log("id :- ", id)
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = useState(false);
   const { showLoader, hideLoader } = useGlobalLoaderContext();
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
+
+  const handleClickOpen = () => setOpen(true);
 
   const handleDelete = async () => {
     try {
-      showLoader(); // 👈 correct message
-      await axios.delete(`http://localhost:8080/api/image/${id}`);
+      showLoader();
+      const token = localStorage.getItem("token");
 
-      // Update state after delete
+      await axios.delete(`http://localhost:8080/api/image/${id}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      // ✅ Update image list after delete
       setImages((prev) => prev.filter((img) => img._id !== id));
 
-      toast.success("Deleted Image and Details Successfully!", {
-        id: "delete-status",
-      });
-    } catch (error) {
-      console.error("Delete failed:", error);
-      toast.error("Failed to delete image!", { id: "delete-status" });
+      toast.success("🗑️ Image deleted successfully!");
+      setOpen(false); // close dialog after success
+    } catch (err) {
+      console.error("Delete failed:", err);
+      toast.error(err.response?.data?.message || "❌ Failed to delete image");
     } finally {
-      hideLoader(); // 👈 always hide loader
-      setOpen(false); // 👈 always close modal/dialog
+      hideLoader();
     }
-  };
-
-  const handleClose = () => {
-    setOpen(false);
   };
 
   return (
     <React.Fragment>
+      {/* Delete Button */}
       <Button
         variant="outlined"
         onClick={handleClickOpen}
         sx={{
-          background: "white",
           width: "100%",
-          boxShadow: "0 4px 12px rgba(0,0,0,0.15)",
-          transition: "transform 0.3s ease, box-shadow 0.3s ease",
-          cursor: "pointer",
-        }}
-        onMouseOver={(e) => {
-          e.currentTarget.style.transform = "scale(1.05)";
-          e.currentTarget.style.background = "red";
-          e.currentTarget.style.color = "white";
-          e.currentTarget.style.boxShadow = "0 8px 20px rgba(0,0,0,0.3)";
-        }}
-        onMouseOut={(e) => {
-          e.currentTarget.style.transform = "scale(1)";
-          e.currentTarget.style.background = "white";
-          e.currentTarget.style.color = "blue";
-          e.currentTarget.style.boxShadow = "0 4px 12px rgba(0,0,0,0.15)";
+          background: "white",
+          color: "red",
+          fontWeight: "bold",
+          borderColor: "red",
+          "&:hover": {
+            background: "red",
+            color: "white",
+            transform: "scale(1.05)",
+          },
         }}
       >
         Delete
       </Button>
+
+      {/* Dialog Box */}
       <Dialog
         open={open}
-        onClose={handleClose}
+        onClose={() => setOpen(false)}
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >
-        {/* <DialogTitle id="alert-dialog-title">
-          {"Use Google's location service?"}
-        </DialogTitle> */}
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
-            Are you Sure? You want to delete this Users.
+            Are you sure you want to delete this image and its details?
           </DialogContentText>
         </DialogContent>
         <DialogActions>
           <Button
             variant="outlined"
-            onMouseOver={(e) => {
-              e.currentTarget.style.transform = "scale(1.05)";
-              e.currentTarget.style.background = "red";
-              e.currentTarget.style.color = "white";
-              e.currentTarget.style.boxShadow = "0 8px 20px rgba(0,0,0,0.3)";
+            onClick={() => setOpen(false)}
+            sx={{
+              borderColor: "gray",
+              color: "gray",
+              "&:hover": {
+                background: "lightgray",
+                color: "black",
+              },
             }}
-            onMouseOut={(e) => {
-              e.currentTarget.style.transform = "scale(1)";
-              e.currentTarget.style.background = "white";
-              e.currentTarget.style.color = "blue";
-              e.currentTarget.style.boxShadow = "0 4px 12px rgba(0,0,0,0.15)";
-            }}
-            onClick={handleClose}
           >
             Cancel
           </Button>
           <Button
             variant="outlined"
-            onMouseOver={(e) => {
-              e.currentTarget.style.transform = "scale(1.05)";
-              e.currentTarget.style.background = "green";
-              e.currentTarget.style.color = "white";
-              e.currentTarget.style.boxShadow = "0 8px 20px rgba(0,0,0,0.3)";
-            }}
-            onMouseOut={(e) => {
-              e.currentTarget.style.transform = "scale(1)";
-              e.currentTarget.style.background = "white";
-              e.currentTarget.style.color = "blue";
-              e.currentTarget.style.boxShadow = "0 4px 12px rgba(0,0,0,0.15)";
-            }}
             onClick={handleDelete}
             autoFocus
+            sx={{
+              borderColor: "green",
+              color: "green",
+              fontWeight: "bold",
+              "&:hover": {
+                background: "green",
+                color: "white",
+              },
+            }}
           >
-            Agree
+            Confirm
           </Button>
         </DialogActions>
       </Dialog>

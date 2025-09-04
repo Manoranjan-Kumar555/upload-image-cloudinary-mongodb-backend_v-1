@@ -1,25 +1,41 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import axios from "axios";
-import "./ImageUploader.css"; // Import CSS
+import "./ImageUploader.css";
 import toast from "react-hot-toast";
-import { useGlobalLoaderContext } from "../helpers/GlobalLoader"; // adjust path
- import { useNavigate } from "react-router";
+import { useGlobalLoaderContext } from "../helpers/GlobalLoader";
+import { useNavigate } from "react-router";
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
+
+// ✅ Yup Validation Schema
+const schema = yup.object().shape({
+  name: yup.string().required("⚠️ Name is required"),
+  email: yup.string().email("⚠️ Enter valid email").required("⚠️ Email is required"),
+  mobile: yup
+    .string()
+    .matches(/^[0-9]{10}$/, "⚠️ Mobile must be 10 digits")
+    .required("⚠️ Mobile is required"),
+});
 
 const ImageUploader = () => {
   const [file, setFile] = useState(null);
   const [preview, setPreview] = useState(null);
   const [uploadedUrl, setUploadedUrl] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [form, setForm] = useState({
-    name: "",
-    email: "",
-    mobile: "",
-  });
+  const fileInputRef = useRef(null);
 
-  const naviagte = useNavigate();
-
+  const navigate = useNavigate();
   const { showLoader, hideLoader } = useGlobalLoaderContext();
 
+  // ✅ React Hook Form setup
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({ resolver: yupResolver(schema) });
+
+  // ✅ File Select
   const handleFileChange = (e) => {
     const selected = e.target.files[0];
     if (selected) {
@@ -29,43 +45,45 @@ const ImageUploader = () => {
     }
   };
 
-  const handleChange = (e) => {
-    setForm({
-      ...form,
-      [e.target.name]: e.target.value,
-    });
+    const openFileDialog = () => {
+    fileInputRef.current.click(); // 👈 trigger input click
   };
 
-  const handleUpload = async () => {
-    if (!file || !form.name || !form.email || !form.mobile) {
-      alert("Please fill all fields and choose an image!");
+  // ✅ Retake (open file dialog)
+  const handleRetake = () => {
+    document.getElementById("fileInput").click();
+  };
+
+  // ✅ Submit form
+  const onSubmit = async (data) => {
+    if (!file) {
+      toast.error("⚠️ Please select an image!");
       return;
     }
+
     setLoading(true);
     try {
       const formData = new FormData();
       formData.append("file", file);
-      formData.append("name", form.name);
-      formData.append("email", form.email);
-      formData.append("mobile", form.mobile);
-      showLoader(); // 👈 show loader
+      formData.append("name", data.name);
+      formData.append("email", data.email);
+      formData.append("mobile", data.mobile);
+
+      showLoader();
       const res = await axios.post(
         "http://localhost:8080/api/image/upload-form",
         formData
       );
+
       setUploadedUrl(res.data?.your_url?.image_url);
-      toast.success("Submitted Image and Details Successfully!", {
-        id: "fetch-success",
-        
-      });
-      naviagte("/data")
+      toast.success("✅ Submitted Successfully!");
+      navigate("/data");
     } catch (err) {
       console.error(err);
-      toast.error("Submitting Details and Images Upload failed!");
-      alert("Upload failed!");
+      toast.error("❌ Upload failed!");
     } finally {
       setLoading(false);
-      hideLoader(); // 👈 always hide loader
+      hideLoader();
     }
   };
 
@@ -73,62 +91,80 @@ const ImageUploader = () => {
     <div className="uploader-container">
       <h2 className="uploader-title">📤 Upload Image with Details</h2>
 
-      <div className="form-fields">
+      <form onSubmit={handleSubmit(onSubmit)} className="form-fields">
+        {/* Name */}
         <input
           type="text"
-          name="name"
-          placeholder="Enter Name"
-          value={form.name}
-          onChange={handleChange}
+          placeholder="👤 Enter Name"
+          {...register("name")}
         />
+        {errors.name && <p className="error">{errors.name.message}</p>}
+
+        {/* Email */}
         <input
           type="email"
-          name="email"
-          placeholder="Enter Email"
-          value={form.email}
-          onChange={handleChange}
+          placeholder="📧 Enter Email"
+          {...register("email")}
         />
+        {errors.email && <p className="error">{errors.email.message}</p>}
+
+        {/* Mobile */}
         <input
           type="text"
-          name="mobile"
-          placeholder="Enter Mobile"
-          value={form.mobile}
-          onChange={handleChange}
+          placeholder="📱 Enter Mobile"
+          {...register("mobile")}
         />
-      </div>
+        {errors.mobile && <p className="error">{errors.mobile.message}</p>}
 
-      <div className="upload-box">
-        <input
-          id="fileInput"
-          type="file"
-          accept="image/*"
-          onChange={handleFileChange}
-        />
-        {/* <label htmlFor="fileInput" className="file-label">
-          {file ? file.name : "Choose File"}
-        </label> */}
+        {/* Upload Box */}
+        <div className="upload-box" onClick={openFileDialog}>
+          {!preview ? (
+            <>
+              <label htmlFor="fileInput" className="file-label">
+                📂 Choose Image
+              </label>
+              <input
+              ref={fileInputRef}
+                id="fileInput"
+                type="file"
+                accept="image/*"
+                onChange={handleFileChange}
+                hidden
+              />
+            </>
+          ) : (
+            <div className="preview-wrapper">
+              <img className="preview-img" src={preview} alt="Preview" />
+              <button type="button" className="retake-btn" onClick={handleRetake}>
+                🔄 Retake
+              </button>
+              <input
+                id="fileInput"
+                type="file"
+                accept="image/*"
+                onChange={handleFileChange}
+                hidden
+              />
+            </div>
+          )}
+        </div>
+        {!file && <p className="error" style={{textAlign:"center"}}>⚠️ Image is required</p>}
 
+        {/* Upload Button */}
         <button
+          type="submit"
           className="upload-btn"
-          onClick={handleUpload}
           disabled={!file || loading}
         >
-          {loading ? "Uploading..." : "Upload"}
+          {loading ? "⏳ Uploading..." : "🚀 Upload"}
         </button>
-      </div>
-
-      {preview && (
-        <div className="preview-container">
-          <p>📷 Preview:</p>
-          <img className="preview-img" src={preview} alt="Preview" />
-        </div>
-      )}
+      </form>
 
       {uploadedUrl && (
         <div className="result">
           <p className="success">✅ Uploaded Successfully!</p>
           <a href={uploadedUrl} target="_blank" rel="noreferrer">
-            View Image
+            🔗 View Image
           </a>
           <img src={uploadedUrl} alt="Uploaded" className="uploaded-img" />
         </div>

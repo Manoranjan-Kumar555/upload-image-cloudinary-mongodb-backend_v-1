@@ -12,7 +12,7 @@
   padding: 2.5rem;
   border-radius: 16px;
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
-  width: 350px;
+  width: 440px;
   text-align: center;
   animation: fadeIn 0.6s ease-in-out;
 }
@@ -115,7 +115,6 @@ button:disabled {
   }
 }
 
-
 .error-text {
   color: #e63946;
   font-size: 0.8rem;
@@ -123,4 +122,3 @@ button:disabled {
   display: block;
   text-align: left;
 }
-

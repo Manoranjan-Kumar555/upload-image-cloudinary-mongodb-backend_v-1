@@ -1,90 +1,125 @@
 .uploader-container {
   max-width: 500px;
-  margin: 40px auto;
-  padding: 20px;
-  border: 2px dashed #4cafef;
+  width: 90%;
+  margin: 30px auto;
+  padding: 25px;
   border-radius: 12px;
+  background: #ffffff;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
   text-align: center;
-  background: #fdfdfd;
-  box-shadow: 0 6px 12px rgba(0,0,0,0.1);
 }
 
 .uploader-title {
-  font-size: 22px;
+  font-size: 1.5rem;
+  font-weight: bold;
   margin-bottom: 20px;
   color: #333;
 }
 
-.form-fields {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  margin-bottom: 20px;
-}
-
 .form-fields input {
-  padding: 10px;
-  border: 1px solid #ddd;
-  border-radius: 6px;
-  font-size: 14px;
-  outline: none;
-  transition: border 0.2s;
+  width: 100%;
+  margin: 10px 0;
+  padding: 12px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  font-size: 1rem;
+  transition: all 0.2s ease;
 }
 
 .form-fields input:focus {
-  border-color: #4cafef;
+  border-color: #007bff;
+  outline: none;
+  box-shadow: 0 0 6px rgba(0, 123, 255, 0.3);
 }
 
 .upload-box {
+  width: 100%;
+  max-width: 300px;
+  height: auto;
+  aspect-ratio: 4 / 3; /* maintain proportional box */
+  border: 2px dashed #007bff;
   display: flex;
-  flex-direction: column;
   align-items: center;
-  gap: 12px;
+  justify-content: center;
+  cursor: pointer;
+  margin: 15px auto;
+  border-radius: 10px;
+  overflow: hidden;
+  background: #fafafa;
 }
 
 .file-label {
-  display: inline-block;
-  padding: 8px 16px;
-  background: #f0f0f0;
-  border-radius: 6px;
+  font-weight: bold;
+  color: #007bff;
   cursor: pointer;
-  transition: background 0.2s;
+  transition: all 0.3s ease;
 }
 
 .file-label:hover {
-  background: #ddd;
-}
-
-.upload-btn {
-  padding: 10px 20px;
-  background: #4cafef;
-  color: white;
-  border: none;
+  color: #fff;
+  background: #007bff;
+  padding: 6px 12px;
   border-radius: 6px;
-  font-size: 14px;
-  cursor: pointer;
-  transition: background 0.3s;
 }
 
-.upload-btn:disabled {
-  background: #aaa;
-  cursor: not-allowed;
-}
-
-.upload-btn:hover:not(:disabled) {
-  background: #2196f3;
-}
-
-.preview-container {
-  margin-top: 20px;
+/* ✅ Preview */
+.preview-wrapper {
+  position: relative;
+  width: 100%;
+  height: 100%;
 }
 
 .preview-img {
   width: 100%;
-  max-height: 250px;
-  object-fit: cover;
-  border-radius: 10px;
-  margin-top: 8px;
+  height: 100%;
+  object-fit: contain;
+  border-radius: 12px;
+  border: 2px solid #eee;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* 🔄 Retake overlay button */
+.retake-btn {
+  position: absolute;
+  bottom: 8px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 6px 14px;
+  background: rgba(119, 119, 119, 0.7);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.retake-btn:hover {
+  background: rgba(14, 204, 0, 0.9);
+}
+
+.upload-btn {
+  display: block;
+  width: 100%;
+  padding: 12px;
+  margin-top: 15px;
+  background: #28a745;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.upload-btn:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+}
+
+.upload-btn:hover:not(:disabled) {
+  background: #218838;
 }
 
 .result {
@@ -94,10 +129,56 @@
 .success {
   color: green;
   font-weight: bold;
+  margin-bottom: 10px;
 }
 
 .uploaded-img {
   width: 100%;
+  max-width: 300px;
   margin-top: 10px;
-  border-radius: 10px;
+  border-radius: 12px;
+  border: 2px solid #ddd;
+}
+
+.error {
+  color: red;
+  font-size: 0.85rem;
+  margin-top: -8px;
+  margin-bottom: 10px;
+  text-align: start;
+  margin-left: 0.5rem;
+}
+
+/* 📱 Responsive Breakpoints */
+@media (max-width: 768px) {
+  .uploader-container {
+    padding: 20px;
+  }
+  .uploader-title {
+    font-size: 1.3rem;
+  }
+  .upload-box {
+    max-width: 250px;
+    aspect-ratio: 1 / 1; /* square on small devices */
+  }
+  .preview-img {
+    border-radius: 8px;
+  }
+}
+
+@media (max-width: 480px) {
+  .uploader-title {
+    font-size: 1.1rem;
+  }
+  .upload-box {
+    max-width: 220px;
+  }
+  .upload-btn {
+    font-size: 0.9rem;
+    padding: 10px;
+  }
+  .retake-btn {
+    font-size: 0.8rem;
+    padding: 5px 10px;
+  }
 }

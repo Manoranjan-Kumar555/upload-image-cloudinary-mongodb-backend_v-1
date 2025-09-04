@@ -6,7 +6,7 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import "./Signup.css";
-import { FiEye, FiEyeOff, FiLogIn } from "react-icons/fi";
+import { FiEye, FiEyeOff } from "react-icons/fi";
 
 // ✅ Validation schema
 const schema = yup.object().shape({
@@ -23,6 +23,10 @@ const schema = yup.object().shape({
     .string()
     .min(6, "Password must be at least 6 characters")
     .required("Password is required"),
+  role: yup
+    .string()
+    .oneOf(["user", "admin"], "Please select a valid role")
+    .required("Role is required"),
 });
 
 const Signup = () => {
@@ -110,6 +114,16 @@ const Signup = () => {
         </div>
         {errors.password && (
           <span className="error-text">{errors.password.message}</span>
+        )}
+
+        {/* Role Dropdown */}
+        <select {...register("role")}>
+          <option value="user">User</option>
+          <option value="admin">Admin</option>
+        </select>
+
+        {errors.role && (
+          <span className="error-text">{errors.role.message}</span>
         )}
 
         {/* Submit */}

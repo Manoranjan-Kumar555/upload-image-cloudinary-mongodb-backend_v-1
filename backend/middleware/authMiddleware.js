@@ -1,20 +1,23 @@
 const jwt = require("jsonwebtoken");
-const User = require("../models/User");
 
-exports.protect = async (req, res, next) => {
-  let token;
-  if (
-    req.headers.authorization &&
-    req.headers.authorization.startsWith("Bearer")
-  ) {
+const authMiddleware = (roles = []) => {
+  return (req, res, next) => {
     try {
-      token = req.headers.authorization.split(" ")[1];
+      const token = req.headers.authorization?.split(" ")[1];
+      if (!token) return res.status(401).json({ message: "Unauthorized" });
+
       const decoded = jwt.verify(token, process.env.JWT_SECRET);
-      req.user = await User.findById(decoded.id).select("-password");
-      return next();
-    } catch {
-      return res.status(401).json({ message: "Token expired or invalid" });
+      req.user = decoded;
+
+      if (roles.length && !roles.includes(decoded.role)) {
+        return res.status(403).json({ message: "Forbidden: Access denied" });
+      }
+
+      next();
+    } catch (error) {
+      return res.status(401).json({ message: "Invalid token" });
     }
-  }
-  return res.status(401).json({ message: "No token provided" });
+  };
 };
+
+module.exports = authMiddleware;
