@@ -71,7 +71,7 @@ const ImageUploader = () => {
 
       showLoader();
       const res = await axios.post(
-        "http://localhost:8080/api/image/upload-form",
+        `${import.meta.env.VITE_API_BASE_URL_IMAGE}/upload-form`,
         formData
       );
 

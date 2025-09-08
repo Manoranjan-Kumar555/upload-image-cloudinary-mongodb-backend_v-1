@@ -38,7 +38,7 @@ const Login = () => {
     setLoading(true);
     try {
       const { data } = await axios.post(
-        "http://localhost:8080/api/auth/login",
+        `${import.meta.env.VITE_API_BASE_URL_AUTH}/login`,
         values
       );
 

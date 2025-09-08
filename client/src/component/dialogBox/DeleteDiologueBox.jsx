@@ -19,7 +19,7 @@ export default function DeleteDiologueBox({ id, onDelete }) {
       showLoader();
       const token = localStorage.getItem("token");
 
-      await axios.delete(`http://localhost:8080/api/image/${id}`, {
+      await axios.delete(`${import.meta.env.VITE_API_BASE_URL_IMAGE}/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
 

@@ -14,7 +14,7 @@ const ImageGallery = () => {
       showLoader();
       const token = localStorage.getItem("token");
 
-      const res = await axios.get("http://localhost:8080/api/image/all", {
+      const res = await axios.get(`${import.meta.env.VITE_API_BASE_URL_IMAGE}/all`, {
         headers: { Authorization: `Bearer ${token}` },
       });
 
